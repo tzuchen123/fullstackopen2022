@@ -12,22 +12,27 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState(0)
-  const points = { 0: 1, 1: 3, 2: 4, 3: 2 }
+  const [points, setPoints] = useState([0, 0, 0, 0, 0, 0, 0])
+  const [max, setMax] = useState(0)
 
-  const copy = { ...points }
-  // increment the property 2 value by one
+  const handSetVotes = () => {
+    const copy = [...points]
+    copy[selected] = 1 + copy[selected] 
+    setPoints(copy)  
+  }
 
-  copy[2] += 1
-  
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
-      <p>has {votes} votes</p>
-      <button onClick={ () => setVotes(votes+1) }>vote</button>
+      <p>has {points[selected]} votes</p>
 
+      <button onClick={handSetVotes}>Vote</button> 
       <button onClick={ () => setSelected(Math.floor(Math.random() * 7)) }>next anecdote</button>
 
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[points.indexOf(Math.max(...points))]}</p>
+      <p>has {points[points.indexOf(Math.max(...points))]} votes</p>
     </div>
   )
 }
