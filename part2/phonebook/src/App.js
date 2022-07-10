@@ -1,39 +1,63 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import './index.css'
+import personService from './services/persons'
+
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchWord, setSearchWord] = useState('')
+  const [message, setMessage] = useState(null)
+  const [status, setStatus] = useState(true)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+    })
   }, [])
 
 
   const addName = (event) => {
-    if (persons.filter(person => person.name === newName).length === 1) {
-      alert(`${newName} is already added to phonebook`)
+    const person = persons.find(person => person.name === newName)
+    if (person) {
+      alert(`${person.name} is already added to phonebook, replace the old number with a new one?`)
+      const changedPerson = { ...person, number:newNumber,}
+  
+    personService
+      .update(person.id, changedPerson)
+      .then(returnedPerson => {
+        console.log('successed');
+      }).catch(error => {
+        setMessage(`Information of  ${person.name} has already been removed from serve`)
+        setStatus(false)
+      })
+
       return
     }
+    
     event.preventDefault()
-    const nameObject = {
+    const personObject = {
       name: newName,
       number: newNumber,
       id: persons.length + 1,
     }
-  
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNewNumber('')
+    
+    personService
+    .create(personObject)
+    .then(returnedPerson => {
+      setMessage(`Added ${returnedPerson.name}`)
+      setStatus(true)
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
   }
 
   const handleNameChange = (event) => {
@@ -55,6 +79,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} status={status} />
+
       <Filter searchWord={searchWord} handleSearchWord={handleSearchWord} />
       
       <h3>add a new</h3>
@@ -67,7 +93,10 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons 
+        persons={personsToShow}
+        setPersons={setPersons} 
+      />
     </div>
   )
 }
