@@ -7,7 +7,10 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://fullstack:${password}@cluster0.k9qxj.mongodb.net/?retryWrites=true&w=majority`
+const url =
+  `mongodb+srv://fullstack:${password}@cluster0.ull5axf.mongodb.net/?retryWrites=true&w=majority`
+
+mongoose.connect(url)
 
 const noteSchema = new mongoose.Schema({
   content: String,
@@ -17,27 +20,19 @@ const noteSchema = new mongoose.Schema({
 
 const Note = mongoose.model('Note', noteSchema)
 
-mongoose
-  .connect(url)
-  // .then((result) => {
-  //   console.log('connected')
+// const note = new Note({
+//   content: 'HTML is Easy',
+//   date: new Date(),
+//   important: true,
+// })
 
-  //   const note = new Note({
-  //     content: 'HTML is Easy',
-  //     date: new Date(),
-  //     important: true,
-  //   })
-
-  //   return note.save()
-  // })
-  // .then(() => {
-  //   console.log('note saved!')
-  //   return mongoose.connection.close()
-  // })
-  Note.find({}).then(result => {
-    result.forEach(note => {
-      console.log(note)
-    })
-    mongoose.connection.close()
+// note.save().then(result => {
+//   console.log('note saved!')
+//   mongoose.connection.close()
+// })
+Note.find({}).then(result => {
+  result.forEach(note => {
+    console.log(note)
   })
-  .catch((err) => console.log(err))
+  mongoose.connection.close()
+})

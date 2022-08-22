@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/6301e43f605cbd9dfb6c71a1 HTTP/1.1
+content-type: application/json
+
+{
+    "content": "Browser can execute only JavaScript",
+    "important": false
+}
