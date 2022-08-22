@@ -1,16 +1,22 @@
-require('dotenv').config()
 const express = require('express')
-const morgan = require('morgan')
+const app = express()
+const cors = require('cors')
+require('dotenv').config()
+
 const Person = require('./models/person')
 
-const app = express()
-app.use(express.json())
 
+const morgan = require('morgan')
 morgan.token('form', function (req, res) { 
   return JSON.stringify(req.body)
 })
 morgan.format('new', ':method :url :status :res[content-length] - :response-time ms :form');
 app.use(morgan('new'));
+
+app.use(express.json())
+
+app.use(cors())
+
 app.use(express.static('build'))
 
 
