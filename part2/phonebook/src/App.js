@@ -57,6 +57,10 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
+    }).catch(error => {
+      console.log(error.response.data)
+      setMessage(error.response.data)
+      setStatus(false)
     })
   }
 
