@@ -22,13 +22,13 @@ const personSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    minLength: 8,
-    validate: {
-      validator: function(val) {
-        return /\d{3}-\d{3}-\d{4}/.test(v);
-      },
-      message: props => `${props.value} is not a valid phone number!`
-    },
+    // minLength: 8,
+    // validate: {
+    //   validator: function(val) {
+    //     return /\d{3}-\d{3}-\d{4}/.test(v);
+    //   },
+    //   message: props => `${props.value} is not a valid phone number!`
+    // },
   },
 })
 
