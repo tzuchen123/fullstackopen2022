@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 const url = process.env.url
 
 console.log('connecting to', url)
