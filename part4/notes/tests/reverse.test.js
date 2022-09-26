@@ -18,4 +18,4 @@ describe('average', () => {
 
     expect(result).toBe('releveler')
   })
-}
+})
